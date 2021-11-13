@@ -1,0 +1,24 @@
+syntax = "proto3";
+option go_package="./;services";
+
+//grpc-gateway的第三方库,为了让编译命令可以写得方便，直接把grpc-gateway的google目录拷贝到当前目录下了
+import "google/api/annotations.proto";
+import "Model.proto";
+
+message OrderResponse{
+    string status = 1;
+    string message = 2;
+}
+
+message OrderRequest{
+    OrderMain order_main=1;
+}
+
+service OrderService{
+    rpc NewOrder(OrderRequest) returns (OrderResponse){
+        option (google.api.http) = {
+            post: "/v1/orders"
+            body: "order_main"
+        };
+    }
+}

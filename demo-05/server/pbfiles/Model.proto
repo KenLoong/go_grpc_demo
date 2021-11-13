@@ -1,0 +1,39 @@
+syntax="proto3";
+option go_package="./;services";
+// package services;
+
+//这是protoc的源代码,注意，路径要/，不能是\
+import "google/protobuf/timestamp.proto";
+//F:\GoProjects\pkg\mod\github.com\envoyproxy\protoc-gen-validate@v0.6.2\validate
+import "validate.proto";
+
+message ProModel{
+    int32 prod_id = 1;
+    string prod_name=2;
+    float prod_price=3;
+}
+
+//主订单模型
+message OrderMain{
+    int32 order_id = 1; //订单id，数字自增
+    string order_no = 2;
+    int32 user_id = 3; 
+    //用第三方库验证
+    float order_money=4[(validate.rules).float.gt = 1]; //商品金额
+    google.protobuf.Timestamp order_time=5;
+    repeated OrderDetail order_details=6;
+}
+
+message OrderDetail{
+    int32 detail_id=1;
+    string order_no=2;
+    int32 prod_id=3;
+    float prod_price=4;
+    int32 prod_num=5;
+}
+
+//用户模型
+message UserInfo{
+    int32 user_id=1;
+    int32 user_score=2;
+}

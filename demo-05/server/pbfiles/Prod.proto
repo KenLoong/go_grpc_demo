@@ -1,0 +1,44 @@
+syntax = "proto3";
+//google文件夹 ：F:\GoProjects\pkg\mod\github.com\grpc-ecosystem\grpc-gateway@v1.16.0\third_party\googleapis
+option go_package="./;services";
+package services;
+
+
+//要生成gateway代码，就要加引入这个
+import "google/api/annotations.proto";
+import "Model.proto";
+
+message ProdRequest{
+    int32 prod_id = 1;  //传入的商品id
+    ProdAreas prod_area = 2;
+}
+
+message ProResponse{
+    int32 prod_stock = 1; //商品库存
+}
+
+message QuerySize{
+    int32 size = 1; //页尺寸
+}
+
+message ProStockList{
+    //定义切片
+    repeated ProResponse prodres = 1;
+}
+
+enum ProdAreas{
+    A=0; //枚举类型，第一个必须是0
+    B=1;
+    C=2;
+}
+
+service ProdService{
+    rpc GetProdStock(ProdRequest) returns (ProResponse){
+        option (google.api.http) = {
+            get : "/v1/prod_id/{prod_id}"
+        };
+    }
+
+    rpc GetProdStocks(QuerySize) returns(ProStockList){}
+    rpc GetProdInfo(ProdRequest) returns(ProModel){}
+}

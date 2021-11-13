@@ -1,0 +1,25 @@
+syntax = "proto3";
+//google文件夹 ：F:\GoProjects\pkg\mod\github.com\grpc-ecosystem\grpc-gateway@v1.16.0\third_party\googleapis
+option go_package="./;services";
+
+import "google/api/annotations.proto";
+import "Model.proto";
+
+message UserScoreRequest{
+    repeated UserInfo users = 1;
+}
+
+message UserScoreResponse{
+    repeated UserInfo users = 1;
+}
+
+service UserService{
+    //简单rpc
+    rpc GetUserScore(UserScoreRequest) returns (UserScoreResponse);
+    //服务端流，stream修饰返回参数,服务端分多次发送，客户端一次性把请求发完
+    rpc GetUserScoreServerStream(UserScoreRequest) returns (stream UserScoreResponse);
+    //客户端流，客户端分多次发送请求，服务端一次性把结果返回,stream修饰请求参数
+    rpc GetUserScoreClientStream(stream UserScoreRequest) returns (UserScoreResponse);
+    //双向流
+    rpc GetUserScoreTwsStream(stream UserScoreRequest) returns (stream UserScoreResponse);
+}
